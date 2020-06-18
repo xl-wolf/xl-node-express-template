@@ -18,7 +18,7 @@ router.get("/tree", (req, res) => {
           provinceName: "山西",
         },
         {
-          provinceName: "内蒙古自治区",
+          provinceName: "内蒙古",
         },
         {
           provinceName: "辽宁",
@@ -60,7 +60,7 @@ router.get("/tree", (req, res) => {
           provinceName: "广东",
         },
         {
-          provinceName: "广西壮族自治区",
+          provinceName: "广西",
         },
         {
           provinceName: "海南",
@@ -84,25 +84,25 @@ router.get("/tree", (req, res) => {
           provinceName: "青海",
         },
         {
-          provinceName: "西藏自治区",
+          provinceName: "西藏",
         },
         {
-          provinceName: "宁夏回族自治区",
+          provinceName: "宁夏",
         },
         {
           provinceName: "台湾",
         },
         {
-          provinceName: "北京市",
+          provinceName: "北京",
         },
         {
-          provinceName: "天津市",
+          provinceName: "天津",
         },
         {
-          provinceName: "上海市",
+          provinceName: "上海",
         },
         {
-          provinceName: "重庆市",
+          provinceName: "重庆",
         },
         {
           provinceName: "香港",
@@ -111,7 +111,7 @@ router.get("/tree", (req, res) => {
           provinceName: "澳门",
         },
         {
-          provinceName: "新疆维吾尔自治区",
+          provinceName: "新疆",
         },
       ],
     },
