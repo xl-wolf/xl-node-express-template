@@ -14,7 +14,6 @@ def excel_to_json(excel_file, active_sheet, json_f_name):
     heads = []
     book = openpyxl.load_workbook(excel_file)
     sheet = book[active_sheet]
-    print('------')
     max_row = sheet.max_row
     max_column = sheet.max_column
     # 解析表头
