@@ -5,12 +5,13 @@
     "url": "https://github.com/xl-wolf/vue-node.git"
   },
   "scripts": {
-    "dev": "node main.js",
-    "supervisor": "supervisor --harmony main.js"
+    "dev": "nodemon main.js",
+    "start": "npm run dev"
   },
   "dependencies": {
     "body-parser": "^1.18.3",
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "express": "^4.16.4",
