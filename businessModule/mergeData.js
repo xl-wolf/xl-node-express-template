@@ -1,14 +1,12 @@
 const fs = require('fs'); //文件模块
 const path = require('path'); //系统路径模块
 const { mkdirsRecursive } = require('../utils')
+const json2xls = require('json2xls');
 
 const mergeData = () => {
   const join = (file) => path.join(__dirname, file);
-  const loadData = (filename) => JSON.parse(JSON.parse(fs.readFileSync(filename, 'utf-8')))
+  const loadData = (filename) => JSON.parse(fs.readFileSync(filename, 'utf-8'))
 
-  // 创建mergedJson文件夹
-  const mergedJsonPath = '../mergedJson'
-  mkdirsRecursive(mergedJsonPath)
   // 合并tempJson目录下的所有文件的数据的方法
   const mergeTempJsonDirData = (files, dir) => {
     const fileDatas = []
@@ -19,25 +17,19 @@ const mergeData = () => {
   const writeFileTolocal = (jsondata, filename) => {
     const jsonContent = JSON.stringify(jsondata);
     const destfile = join(`${mergedJsonPath}/${filename}.json`)
-    fs.writeFile(destfile, jsonContent, 'utf-8', (err) => {
-      if (err) {
-        console.log("output.json失败了");
-        return
-      }
+    try {
+      fs.writeFileSync(destfile, jsonContent, 'utf-8')
       console.log(`保存${filename}.json成功！！`);
-    });
-  }
+    } catch (err) {
+      console.log("output.json失败了");
+      return
+    }
+  };
+
   let yuanshujudata, fukuandata, shoukuandata, shouhoucangkudata, shouhouqudaodata
   // 读取数据tempJson文件夹下的所有文件
   const tempJsonPath = '../tempJson'
   const dirs = fs.readdirSync(join(tempJsonPath))
-  // 重命名文件
-  dirs.forEach(dir => {
-    const files = fs.readdirSync(join(`${tempJsonPath}/${dir}`))
-    files.forEach(file => {
-      fs.renameSync(join(`${tempJsonPath}/${dir}/${file}`), join(`${tempJsonPath}/${dir}/${file}.json`))
-    })
-  })
   // 处理数据
   dirs.forEach(dir => {
     const files = fs.readdirSync(join(`${tempJsonPath}/${dir}`))
@@ -58,8 +50,12 @@ const mergeData = () => {
     else if (dir === '售后渠道退款单') {
       shouhouqudaodata = mergedJson
     }
+
     // 保存下数据方便排查问题影响性能的时候可以注释掉
-    writeFileTolocal(mergedJson, `合并后的${dir}`)
+    // 创建mergedJson文件夹
+    // const mergedJsonPath = '../mergedJson'
+    // mkdirsRecursive(join(`${mergedJsonPath}`))
+    // writeFileTolocal(mergedJson, `合并后的${dir}`)
   })
 
   const mergeDataFunc = () => {
@@ -87,7 +83,7 @@ const mergeData = () => {
     return { tmpHash, allmatched }
   }
   const { tmpHash, allmatched } = mergeDataFunc()
-
+  
   if (allmatched) {
     // 输出结果
     const resJson = Object.values(tmpHash).map((resdata) => ({
@@ -109,7 +105,13 @@ const mergeData = () => {
       '利润': resdata['应收金额'] - resdata['应付金额'] - resdata['售后渠道退款'] + resdata['售后仓库退款'],
     }))
 
-    writeFileTolocal(resJson, `最终要获得的数据`)
+    mkdirsRecursive(join('../finalExcel'))
+    const xls = json2xls(resJson);
+    fs.writeFileSync(join(`../finalExcel/最终要获得的数据.xlsx`), xls, 'binary');
+    // 保存下数据方便排查问题影响性能的时候可以注释掉
+    // writeFileTolocal(resJson, `最终要获得的数据`)
+  } else {
+    console.log('请查看控制台信息，存在与源数据表格不一致的订单编号！！！')
   }
 }
 
