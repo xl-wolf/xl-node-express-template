@@ -1,6 +1,6 @@
 # dependencies
-/node_modules
-/finalExcel 
+node_modules/
+finalExcel/
 sourceData/
 tempJson/
-/mergedJson
+mergedJson/
