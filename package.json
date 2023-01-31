@@ -6,7 +6,7 @@
   },
   "scripts": {
     "dev": "nodemon main.js",
-    "start": "npm run dev"
+    "start": "node main.js"
   },
   "dependencies": {
     "body-parser": "^1.18.3",

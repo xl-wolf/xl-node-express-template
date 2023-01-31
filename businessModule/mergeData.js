@@ -83,31 +83,23 @@ const mergeData = () => {
     return { tmpHash, allmatched }
   }
   const { tmpHash, allmatched } = mergeDataFunc()
-  
+
   if (allmatched) {
+    const fieldConfig = JSON.parse(fs.readFileSync(join(`./fieldConfig.json`)))
     // 输出结果
-    const resJson = Object.values(tmpHash).map((resdata) => ({
-      '订单编号': resdata['订单编号'],
-      '收件人': resdata['收件人'],
-      '收件人电话': resdata['收件人电话'],
-      '收件人地址': resdata['收件人地址'],
-      '发货状态': resdata['发货状态'],
-      '订单状态': resdata['订单状态'],
-      '渠道名称': resdata['渠道名称'],
-      '商品名称': resdata['商品名称'],
-      '商品单价': resdata['商品单价'],
-      '商品数量': resdata['商品数量'],
-      '订单金额': resdata['订单金额'],
-      '应收金额': resdata['应收金额'],
-      '应付金额': resdata['应付金额'],
-      '售后渠道退款': resdata['售后渠道退款'],
-      '售后仓库退款': resdata['售后仓库退款'],
-      '利润': resdata['应收金额'] - resdata['应付金额'] - resdata['售后渠道退款'] + resdata['售后仓库退款'],
-    }))
+    const resJson = Object.values(tmpHash).map((resdata) => {
+      const res = {}
+      fieldConfig.forEach(field => {
+        res[field] = resdata[field]
+        res['利润'] = resdata['应收金额'] - resdata['应付金额'] - resdata['售后渠道退款'] + resdata['售后仓库退款']
+      })
+      return res
+    })
 
     mkdirsRecursive(join('../finalExcel'))
     const xls = json2xls(resJson);
     fs.writeFileSync(join(`../finalExcel/最终要获得的数据.xlsx`), xls, 'binary');
+    console.log('最终要获得的数据.xlsx成功！！')
     // 保存下数据方便排查问题影响性能的时候可以注释掉
     // writeFileTolocal(resJson, `最终要获得的数据`)
   } else {

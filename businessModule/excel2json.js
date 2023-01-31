@@ -23,5 +23,5 @@ const excel2json = () => {
   })
   mergeData()
 }
-excel2json()
+
 module.exports = excel2json
